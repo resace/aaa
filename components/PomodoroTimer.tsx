@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, TextInput } from 'react-native';
 import { Play, Pause, RotateCcw, Settings, History, Clock } from 'lucide-react-native';
 import { PomodoroSettings, PomodoroSession } from '@/utils/storage';
 import { useAppContext } from '@/contexts/AppContext';
@@ -178,94 +178,74 @@ export default function PomodoroTimer({ onSettingsPress }: PomodoroTimerProps) {
         <ScrollView style={styles.settingsContainer}>
           <View style={styles.settingItem}>
             <Text style={styles.settingLabel}>Tempo de Foco (minutos)</Text>
-            <View style={styles.settingButtons}>
-              {[15, 25, 30, 45, 60].map(value => (
-                <TouchableOpacity
-                  key={value}
-                  style={[
-                    styles.settingButton,
-                    pomodoroSettings.workTime === value && styles.settingButtonActive
-                  ]}
-                  onPress={() => updateAdvancedSetting('workTime', value)}
-                >
-                  <Text style={[
-                    styles.settingButtonText,
-                    pomodoroSettings.workTime === value && styles.settingButtonTextActive
-                  ]}>
-                    {value}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <TextInput
+              style={styles.settingInput}
+              value={pomodoroSettings.workTime.toString()}
+              onChangeText={(text) => {
+                const value = parseInt(text) || 1;
+                if (value >= 1 && value <= 120) {
+                  updateAdvancedSetting('workTime', value);
+                }
+              }}
+              keyboardType="numeric"
+              placeholder="25"
+              placeholderTextColor="#6B7280"
+            />
+            <Text style={styles.settingHint}>Entre 1 e 120 minutos</Text>
           </View>
 
           <View style={styles.settingItem}>
             <Text style={styles.settingLabel}>Pausa Curta (minutos)</Text>
-            <View style={styles.settingButtons}>
-              {[5, 10, 15].map(value => (
-                <TouchableOpacity
-                  key={value}
-                  style={[
-                    styles.settingButton,
-                    pomodoroSettings.breakTime === value && styles.settingButtonActive
-                  ]}
-                  onPress={() => updateAdvancedSetting('breakTime', value)}
-                >
-                  <Text style={[
-                    styles.settingButtonText,
-                    pomodoroSettings.breakTime === value && styles.settingButtonTextActive
-                  ]}>
-                    {value}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <TextInput
+              style={styles.settingInput}
+              value={pomodoroSettings.breakTime.toString()}
+              onChangeText={(text) => {
+                const value = parseInt(text) || 1;
+                if (value >= 1 && value <= 60) {
+                  updateAdvancedSetting('breakTime', value);
+                }
+              }}
+              keyboardType="numeric"
+              placeholder="5"
+              placeholderTextColor="#6B7280"
+            />
+            <Text style={styles.settingHint}>Entre 1 e 60 minutos</Text>
           </View>
 
           <View style={styles.settingItem}>
             <Text style={styles.settingLabel}>Pausa Longa (minutos)</Text>
-            <View style={styles.settingButtons}>
-              {[15, 20, 30, 45].map(value => (
-                <TouchableOpacity
-                  key={value}
-                  style={[
-                    styles.settingButton,
-                    pomodoroSettings.longBreakTime === value && styles.settingButtonActive
-                  ]}
-                  onPress={() => updateAdvancedSetting('longBreakTime', value)}
-                >
-                  <Text style={[
-                    styles.settingButtonText,
-                    pomodoroSettings.longBreakTime === value && styles.settingButtonTextActive
-                  ]}>
-                    {value}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <TextInput
+              style={styles.settingInput}
+              value={pomodoroSettings.longBreakTime.toString()}
+              onChangeText={(text) => {
+                const value = parseInt(text) || 1;
+                if (value >= 1 && value <= 120) {
+                  updateAdvancedSetting('longBreakTime', value);
+                }
+              }}
+              keyboardType="numeric"
+              placeholder="15"
+              placeholderTextColor="#6B7280"
+            />
+            <Text style={styles.settingHint}>Entre 1 e 120 minutos</Text>
           </View>
 
           <View style={styles.settingItem}>
             <Text style={styles.settingLabel}>Sessões até Pausa Longa</Text>
-            <View style={styles.settingButtons}>
-              {[2, 3, 4, 5, 6].map(value => (
-                <TouchableOpacity
-                  key={value}
-                  style={[
-                    styles.settingButton,
-                    pomodoroSettings.sessionsUntilLongBreak === value && styles.settingButtonActive
-                  ]}
-                  onPress={() => updateAdvancedSetting('sessionsUntilLongBreak', value)}
-                >
-                  <Text style={[
-                    styles.settingButtonText,
-                    pomodoroSettings.sessionsUntilLongBreak === value && styles.settingButtonTextActive
-                  ]}>
-                    {value}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <TextInput
+              style={styles.settingInput}
+              value={pomodoroSettings.sessionsUntilLongBreak.toString()}
+              onChangeText={(text) => {
+                const value = parseInt(text) || 1;
+                if (value >= 1 && value <= 10) {
+                  updateAdvancedSetting('sessionsUntilLongBreak', value);
+                }
+              }}
+              keyboardType="numeric"
+              placeholder="4"
+              placeholderTextColor="#6B7280"
+            />
+            <Text style={styles.settingHint}>Entre 1 e 10 sessões</Text>
           </View>
         </ScrollView>
       </View>
@@ -540,28 +520,17 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginBottom: 12,
   },
-  settingButtons: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  settingButton: {
+  settingInput: {
     backgroundColor: '#374151',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    minWidth: 50,
-    alignItems: 'center',
-  },
-  settingButtonActive: {
-    backgroundColor: '#60A5FA',
-  },
-  settingButtonText: {
+    borderRadius: 12,
+    padding: 16,
     color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
+    marginBottom: 8,
   },
-  settingButtonTextActive: {
-    fontWeight: '600',
+  settingHint: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    fontStyle: 'italic',
   },
 });
