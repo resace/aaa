@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert, Dimensions } from 'react-native';
-import { Calendar, Clock, Target, BookOpen, Settings, CreditCard as Edit } from 'lucide-react-native';
+import { Calendar, Clock, Target, BookOpen, Settings, CreditCard as Edit, Shield } from 'lucide-react-native';
 import { WeeklyGoal, Subject, PomodoroSettings } from '@/utils/storage';
 import { useAppContext } from '@/contexts/AppContext';
 import PomodoroTimer from '@/components/PomodoroTimer';
 import SubjectParser from '@/components/SubjectParser';
 import SubjectEditor from '@/components/SubjectEditor';
+import BackupManager from '@/components/BackupManager';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -14,6 +15,7 @@ export default function Home() {
   const [todayGoals, setTodayGoals] = useState<(WeeklyGoal & { subjectName: string })[]>([]);
   const [showPomodoroSettings, setShowPomodoroSettings] = useState(false);
   const [showSubjectEditor, setShowSubjectEditor] = useState(false);
+  const [showBackupManager, setShowBackupManager] = useState(false);
   const [pomodoroSettings, setPomodoroSettings] = useState<PomodoroSettings>({
     workTime: 25,
     breakTime: 5,
@@ -135,11 +137,27 @@ export default function Home() {
     );
   }
 
+  if (showBackupManager) {
+    return (
+      <BackupManager
+        onClose={() => setShowBackupManager(false)}
+      />
+    );
+  }
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Text style={styles.greeting}>Bom dia!</Text>
-        <Text style={styles.date}>{getCurrentDate()}</Text>
+        <View style={styles.headerContent}>
+          <Text style={styles.greeting}>Bom dia!</Text>
+          <Text style={styles.date}>{getCurrentDate()}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.backupButton}
+          onPress={() => setShowBackupManager(true)}
+        >
+          <Shield size={20} color="#FFFFFF" />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
@@ -237,8 +255,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#111827',
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     padding: 20,
     paddingTop: 60,
+  },
+  headerContent: {
+    flex: 1,
   },
   greeting: {
     fontSize: 28,
@@ -250,6 +274,15 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     marginTop: 4,
     textTransform: 'capitalize',
+  },
+  backupButton: {
+    backgroundColor: '#1F2937',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4,
   },
   section: {
     marginTop: 24,

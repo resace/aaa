@@ -60,22 +60,17 @@ export default function Estudos() {
 
   const handleExportData = async () => {
     try {
-      // Implementar exportação usando o contexto
-      const exportData = {
-        subjects,
-        exportDate: new Date().toISOString(),
-      };
-      
+      // Redirecionar para o BackupManager
       Alert.alert(
         'Exportar Dados',
-        'Todos os dados foram preparados para exportação:\n\n' + 
-        `• ${subjects.length} matérias\n` +
-        `• Sessões de estudo\n` +
-        `• Metas semanais\n` +
-        `• Simulados\n` +
-        `• Histórico Pomodoro\n\n` +
-        'Em um app real, isso seria salvo como arquivo JSON para backup.',
-        [{ text: 'OK' }]
+        'Para exportar todos os dados do app, use o sistema de backup na tela inicial.',
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Ir para Backup', onPress: () => {
+            // Navegar para a tela inicial onde está o botão de backup
+            Alert.alert('Info', 'Acesse o botão de backup (escudo) na tela inicial para exportar todos os dados.');
+          }},
+        ]
       );
     } catch (error) {
       Alert.alert('Erro', 'Erro ao exportar dados');

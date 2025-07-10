@@ -69,22 +69,17 @@ export default function Simulados() {
 
   const handleExportData = async () => {
     try {
-      const allData = {
-        subjects,
-        exams,
-        exportDate: new Date().toISOString(),
-      };
-      
-      const jsonData = JSON.stringify(allData, null, 2);
-      
-      // Em um app real, você usaria react-native-fs ou similar para salvar
+      // Redirecionar para o BackupManager
       Alert.alert(
         'Exportar Dados',
-        'Dados preparados para exportação:\n\n' + 
-        `${subjects.length} matérias\n` +
-        `${exams.length} simulados\n\n` +
-        'Em um app real, isso seria salvo como arquivo JSON.',
-        [{ text: 'OK' }]
+        'Para exportar todos os dados do app, use o sistema de backup na tela inicial.',
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Ir para Backup', onPress: () => {
+            // Navegar para a tela inicial onde está o botão de backup
+            Alert.alert('Info', 'Acesse o botão de backup (escudo) na tela inicial para exportar todos os dados.');
+          }},
+        ]
       );
     } catch (error) {
       Alert.alert('Erro', 'Erro ao exportar dados');

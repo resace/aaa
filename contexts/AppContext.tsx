@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { StorageService, Subject, WeeklyGoal, StudySession, Exam, PomodoroSession, PomodoroSettings } from '@/utils/storage';
+import { BackupService } from '@/utils/backupService';
 
 interface AppState {
   subjects: Subject[];
@@ -69,6 +70,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // Carregar dados iniciais
   const loadInitialData = async () => {
     try {
+      // Verificar e criar backup automático se necessário
+      await BackupService.checkAndCreateAutoBackup();
+      
       const [
         subjects,
         weeklyGoals,
