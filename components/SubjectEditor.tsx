@@ -131,6 +131,12 @@ export default function SubjectEditor({ onClose }: SubjectEditorProps) {
       Alert.alert('Erro', 'Erro ao salvar alterações');
     }
   };
+    const handleSave = () => {
+    updateSubjects(editingSubjects); // salva os dados no contexto
+    Alert.alert("Matérias salvas com sucesso!");
+    onClose(); // fecha o editor
+  };
+
 
   return (
     <View style={styles.container}>
